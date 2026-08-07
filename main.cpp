@@ -1,189 +1,140 @@
 #include <iostream>
-#include <vector>
-#include <string>
 using namespace std;
 
-class Vehicle {
-public:
-    int vehicleNumber;
-    string ownerName;
-    string vehicleType;
+const int MAX_SLOTS = 10;
 
-    Vehicle(int number, string owner, string type) {
-        vehicleNumber = number;
-        ownerName = owner;
-        vehicleType = type;
-    }
-};
+int vehicleNumber[MAX_SLOTS];
+string ownerName[MAX_SLOTS];
+string vehicleType[MAX_SLOTS];
 
-class ParkingSystem {
-private:
-    vector<Vehicle> vehicles;
-    int totalSlots;
+int parkedVehicles = 0;
 
-public:
-    ParkingSystem(int slots) {
-        totalSlots = slots;
+// Vehicle park karna
+void parkVehicle()
+{
+    if (parkedVehicles == MAX_SLOTS)
+    {
+        cout << "\nParking is full!\n";
+        return;
     }
 
-    // Vehicle park karna
-    void parkVehicle() {
-        if (vehicles.size() >= totalSlots) {
-            cout << "\nParking Full! No slot available.\n";
-            return;
-        }
+    cout << "\nEnter vehicle number: ";
+    cin >> vehicleNumber[parkedVehicles];
 
-        int number;
-        string owner, type;
+    cout << "Enter owner name: ";
+    cin >> ownerName[parkedVehicles];
 
-        cout << "\nEnter Vehicle Number: ";
-        cin >> number;
+    cout << "Enter vehicle type: ";
+    cin >> vehicleType[parkedVehicles];
 
-        cout << "Enter Owner Name: ";
-        cin >> owner;
+    parkedVehicles++;
 
-        cout << "Enter Vehicle Type (Car/Bike): ";
-        cin >> type;
+    cout << "\nVehicle parked successfully!\n";
+}
 
-        vehicles.push_back(Vehicle(number, owner, type));
-
-        cout << "\nVehicle parked successfully!\n";
-        cout << "Slot Number: " << vehicles.size() << endl;
+// Saare vehicles display karna
+void displayVehicles()
+{
+    if (parkedVehicles == 0)
+    {
+        cout << "\nNo vehicle is parked.\n";
+        return;
     }
 
-    // Parked vehicles display karna
-    void displayVehicles() {
-        if (vehicles.empty()) {
-            cout << "\nNo vehicles are parked.\n";
-            return;
-        }
+    cout << "\n----- Parked Vehicles -----\n";
 
-        cout << "\n========== PARKED VEHICLES ==========\n";
-
-        for (int i = 0; i < vehicles.size(); i++) {
-            cout << "\nSlot Number : " << i + 1;
-            cout << "\nVehicle No  : " << vehicles[i].vehicleNumber;
-            cout << "\nOwner Name  : " << vehicles[i].ownerName;
-            cout << "\nVehicle Type: " << vehicles[i].vehicleType;
-            cout << "\n--------------------------------------\n";
-        }
+    for (int i = 0; i < parkedVehicles; i++)
+    {
+        cout << "\nSlot: " << i + 1 << endl;
+        cout << "Vehicle Number: " << vehicleNumber[i] << endl;
+        cout << "Owner Name: " << ownerName[i] << endl;
+        cout << "Vehicle Type: " << vehicleType[i] << endl;
     }
+}
 
-    // Vehicle search karna
-    void searchVehicle() {
-        int number;
-        bool found = false;
+// Vehicle search karna
+void searchVehicle()
+{
+    int number;
+    bool found = false;
 
-        cout << "\nEnter Vehicle Number to search: ";
-        cin >> number;
+    cout << "\nEnter vehicle number: ";
+    cin >> number;
 
-        for (int i = 0; i < vehicles.size(); i++) {
-            if (vehicles[i].vehicleNumber == number) {
-                cout << "\nVehicle Found!\n";
-                cout << "Slot Number : " << i + 1 << endl;
-                cout << "Vehicle No  : " << vehicles[i].vehicleNumber << endl;
-                cout << "Owner Name  : " << vehicles[i].ownerName << endl;
-                cout << "Vehicle Type: " << vehicles[i].vehicleType << endl;
+    for (int i = 0; i < parkedVehicles; i++)
+    {
+        if (vehicleNumber[i] == number)
+        {
+            cout << "\nVehicle found!\n";
+            cout << "Slot: " << i + 1 << endl;
+            cout << "Owner Name: " << ownerName[i] << endl;
+            cout << "Vehicle Type: " << vehicleType[i] << endl;
 
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            cout << "\nVehicle not found.\n";
+            found = true;
+            break;
         }
     }
 
-    // Vehicle remove karna
-    void removeVehicle() {
-        int number;
-        bool found = false;
-
-        cout << "\nEnter Vehicle Number to remove: ";
-        cin >> number;
-
-        for (int i = 0; i < vehicles.size(); i++) {
-            if (vehicles[i].vehicleNumber == number) {
-
-                vehicles.erase(vehicles.begin() + i);
-
-                cout << "\nVehicle removed successfully!\n";
-
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            cout << "\nVehicle not found.\n";
-        }
+    if (!found)
+    {
+        cout << "\nVehicle not found.\n";
     }
+}
 
-    // Available slots
-    void showAvailableSlots() {
-        int occupied = vehicles.size();
-        int available = totalSlots - occupied;
+// Available slots dikhana
+void showSlots()
+{
+    cout << "\nTotal slots: " << MAX_SLOTS;
+    cout << "\nOccupied slots: " << parkedVehicles;
+    cout << "\nAvailable slots: " << MAX_SLOTS - parkedVehicles << endl;
+}
 
-        cout << "\n========== PARKING STATUS ==========\n";
-        cout << "Total Slots     : " << totalSlots << endl;
-        cout << "Occupied Slots  : " << occupied << endl;
-        cout << "Available Slots : " << available << endl;
-    }
-};
-
-int main() {
-
-    ParkingSystem parking(10);
-
+int main()
+{
     int choice;
 
-    do {
-        cout << "\n\n====================================";
-        cout << "\n       VEHICLE PARKING SYSTEM";
-        cout << "\n====================================";
+    do
+    {
+        cout << "\n\n==============================";
+        cout << "\n     VEHICLE PARKING SYSTEM";
+        cout << "\n==============================";
         cout << "\n1. Park Vehicle";
-        cout << "\n2. Display Parked Vehicles";
+        cout << "\n2. Display Vehicles";
         cout << "\n3. Search Vehicle";
-        cout << "\n4. Remove Vehicle";
-        cout << "\n5. Show Available Slots";
-        cout << "\n6. Exit";
-        cout << "\n====================================";
+        cout << "\n4. Show Available Slots";
+        cout << "\n5. Exit";
+        cout << "\n==============================";
 
         cout << "\nEnter your choice: ";
         cin >> choice;
 
-        switch (choice) {
-
+        switch (choice)
+        {
         case 1:
-            parking.parkVehicle();
+            parkVehicle();
             break;
 
         case 2:
-            parking.displayVehicles();
+            displayVehicles();
             break;
 
         case 3:
-            parking.searchVehicle();
+            searchVehicle();
             break;
 
         case 4:
-            parking.removeVehicle();
+            showSlots();
             break;
 
-        case 5:
-            parking.showAvailableSlots();
-            break;
-
-        case 6:
-            cout << "\nThank you for using Parking System!\n";
+        case 5:33
+            cout << "\nThank you!\n";
             break;
 
         default:
-            cout << "\nInvalid choice! Please try again.\n";
+            cout << "\nInvalid choice!\n";
         }
 
-    } while (choice != 6);
+    } while (choice != 5);
 
     return 0;
 }
