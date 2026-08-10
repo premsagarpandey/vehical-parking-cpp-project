@@ -3,338 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Vehicle Parking Management System</title>
-    <meta name="description" content="A modern, interactive vehicle parking management system web interface with real-time visual grid, automated billing, and live analytics.">
-    <!-- Google Fonts for Modern Typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- External Stylesheet -->
+    <title>Vehicle Parking Management System</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ================================================================= -->
-    <!-- HEADER SECTION: Logo, Title, and Real-Time Clock                  -->
-    <!-- ================================================================= -->
-    <header class="app-header">
-        <div class="header-container">
-            <div class="brand-logo">
-                <span class="logo-icon">🚗</span>
-                <div>
-                    <h1>ParkEasy</h1>
-                    <p class="tagline">Smart Vehicle Parking Management System</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <div class="live-clock" id="liveClock">--:--:--</div>
-                <button id="btnDemoData" class="btn btn-secondary btn-sm" title="Load sample parked vehicles">
-                    🔄 Reset Sample Data
-                </button>
-            </div>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>🚗 Vehicle Parking Management System</h1>
+            <p>Simple College Mini Project (C++ & Web)</p>
         </div>
     </header>
 
-    <main class="main-container">
-        <!-- ============================================================= -->
-        <!-- ANALYTICS / STATS CARDS                                       -->
-        <!-- ============================================================= -->
-        <section class="stats-section" aria-label="Parking Overview Statistics">
-            <div class="stat-card">
-                <div class="stat-icon total-icon">🅿️</div>
-                <div class="stat-info">
-                    <span class="stat-label">Total Capacity</span>
-                    <h2 class="stat-value" id="statTotalSlots">20</h2>
-                    <span class="stat-sub">Available slots</span>
-                </div>
-            </div>
+    <div class="container main-content">
 
-            <div class="stat-card">
-                <div class="stat-icon occupied-icon">🚗</div>
-                <div class="stat-info">
-                    <span class="stat-label">Occupied Slots</span>
-                    <h2 class="stat-value text-danger" id="statOccupied">0</h2>
-                    <span class="stat-sub" id="statOccupancyRate">0% Occupancy</span>
-                </div>
+        <!-- Parking Status Cards -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <h3>Total Slots</h3>
+                <p id="totalSlots">20</p>
             </div>
-
-            <div class="stat-card">
-                <div class="stat-icon free-icon">✨</div>
-                <div class="stat-info">
-                    <span class="stat-label">Free Slots</span>
-                    <h2 class="stat-value text-success" id="statFree">20</h2>
-                    <span class="stat-sub">Ready to park</span>
-                </div>
+            <div class="stat-box occupied">
+                <h3>Occupied Slots</h3>
+                <p id="occupiedSlots">0</p>
             </div>
-
-            <div class="stat-card">
-                <div class="stat-icon served-icon">📋</div>
-                <div class="stat-info">
-                    <span class="stat-label">Vehicles Serviced</span>
-                    <h2 class="stat-value" id="statServiced">0</h2>
-                    <span class="stat-sub">Lifetime checkouts</span>
-                </div>
+            <div class="stat-box free">
+                <h3>Free Slots</h3>
+                <p id="freeSlots">20</p>
             </div>
-
-            <div class="stat-card">
-                <div class="stat-icon revenue-icon">💰</div>
-                <div class="stat-info">
-                    <span class="stat-label">Total Revenue</span>
-                    <h2 class="stat-value text-primary" id="statRevenue">₹0</h2>
-                    <span class="stat-sub">Earnings collected</span>
-                </div>
+            <div class="stat-box revenue">
+                <h3>Total Earnings</h3>
+                <p id="totalEarnings">Rs 0</p>
             </div>
-        </section>
+        </div>
 
-        <!-- ============================================================= -->
-        <!-- MAIN CONTENT GRID: Left (Forms) & Right (2D Parking Grid)     -->
-        <!-- ============================================================= -->
-        <div class="content-grid">
+        <div class="grid-layout">
             
-            <!-- LEFT COLUMN: Forms & Search -->
-            <div class="column-left">
+            <!-- Left Side: Parking Form & Tariff Rates -->
+            <div class="left-panel">
                 
-                <!-- CHECK-IN / PARK VEHICLE FORM -->
-                <div class="card form-card">
-                    <div class="card-header">
-                        <h3><span class="icon">📥</span> Check-In Vehicle</h3>
-                        <span class="badge badge-success">New Entry</span>
-                    </div>
-                    <form id="parkForm" class="card-body">
+                <!-- Park Vehicle Form -->
+                <div class="card">
+                    <h2>Park a Vehicle (Entry)</h2>
+                    <form id="parkingForm">
                         <div class="form-group">
-                            <label for="regNumber">Vehicle Registration Number *</label>
-                            <input 
-                                type="text" 
-                                id="regNumber" 
-                                placeholder="e.g. DL 01 AB 1234" 
-                                required 
-                                autocomplete="off"
-                                maxlength="20"
-                            >
-                            <small class="form-hint">Alphanumeric license plate</small>
+                            <label for="vehicleNo">Vehicle Number:</label>
+                            <input type="text" id="vehicleNo" placeholder="e.g. DL 01 AB 1234" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="ownerName">Owner / Driver Name *</label>
-                            <input 
-                                type="text" 
-                                id="ownerName" 
-                                placeholder="e.g. John Doe" 
-                                required 
-                                autocomplete="off"
-                                maxlength="50"
-                            >
+                            <label for="ownerName">Owner Name:</label>
+                            <input type="text" id="ownerName" placeholder="e.g. Rahul Sharma" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="vehicleType">Vehicle Category *</label>
+                            <label for="vehicleType">Vehicle Type:</label>
                             <select id="vehicleType" required>
-                                <option value="1">🏍️ 2-Wheeler (Bike / Scooter) - ₹20/hr</option>
-                                <option value="2" selected>🚗 4-Wheeler (Car / SUV) - ₹50/hr</option>
-                                <option value="3">🚛 Heavy Vehicle (Bus / Truck) - ₹100/hr</option>
+                                <option value="1">Bike / Scooter (Rs 20/hr)</option>
+                                <option value="2" selected>Car / SUV (Rs 50/hr)</option>
+                                <option value="3">Bus / Truck (Rs 100/hr)</option>
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label for="slotSelect">Assign Slot</label>
-                            <select id="slotSelect">
-                                <option value="auto">⚡ Auto-Assign Nearest Free Slot</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" id="btnParkVehicle" class="btn btn-primary btn-block">
-                            🅿️ Confirm & Generate Slip
-                        </button>
+                        <button type="submit" class="btn btn-primary">Park Vehicle</button>
                     </form>
                 </div>
 
-                <!-- QUICK SEARCH & CHECK-OUT CARD -->
+                <!-- Tariff Rates Box -->
                 <div class="card">
-                    <div class="card-header">
-                        <h3><span class="icon">🔍</span> Search & Quick Actions</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="searchInput">Search Parked Vehicles</label>
-                            <input 
-                                type="text" 
-                                id="searchInput" 
-                                placeholder="Search by Reg No. or Owner Name..." 
-                                autocomplete="off"
-                            >
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TARIFF CARD -->
-                <div class="card tariff-card">
-                    <div class="card-header">
-                        <h3><span class="icon">🏷️</span> Parking Tariff Rates</h3>
-                    </div>
-                    <div class="card-body">
-                        <ul class="tariff-list">
-                            <li>
-                                <div class="tariff-item">
-                                    <span class="tariff-type">🏍️ 2-Wheeler (Bike)</span>
-                                    <span class="tariff-price">₹20 / hour</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="tariff-item">
-                                    <span class="tariff-type">🚗 4-Wheeler (Car/SUV)</span>
-                                    <span class="tariff-price">₹50 / hour</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="tariff-item">
-                                    <span class="tariff-type">🚛 Heavy Vehicle (Bus/Truck)</span>
-                                    <span class="tariff-price">₹100 / hour</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <h3>Parking Rates</h3>
+                    <table class="rate-table">
+                        <tr>
+                            <td>🏍️ Bike / Scooter</td>
+                            <td><strong>Rs 20 / hr</strong></td>
+                        </tr>
+                        <tr>
+                            <td>🚗 Car / SUV</td>
+                            <td><strong>Rs 50 / hr</strong></td>
+                        </tr>
+                        <tr>
+                            <td>🚛 Bus / Truck</td>
+                            <td><strong>Rs 100 / hr</strong></td>
+                        </tr>
+                    </table>
                 </div>
 
             </div>
 
-            <!-- RIGHT COLUMN: 2D Interactive Parking Lot Grid -->
-            <div class="column-right">
+            <!-- Right Side: Parking Lot Map & Search -->
+            <div class="right-panel">
+                
+                <!-- Search Box -->
+                <div class="card search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Search vehicle by number or owner name...">
+                </div>
+
+                <!-- Visual 20 Slots Grid -->
                 <div class="card">
-                    <div class="card-header flex-between">
-                        <div>
-                            <h3><span class="icon">🗺️</span> Real-Time 2D Parking Lot Map</h3>
-                            <p class="card-subtitle">Click any occupied slot to check out, or a free slot to park</p>
-                        </div>
-                        <div class="legend">
-                            <span class="legend-item"><span class="legend-dot dot-free"></span> Free</span>
-                            <span class="legend-item"><span class="legend-dot dot-occupied"></span> Occupied</span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <!-- Grid of 20 Parking Spots -->
-                        <div class="parking-grid" id="parkingGrid">
-                            <!-- Populated dynamically via app.js -->
-                        </div>
+                    <h2>Parking Slots (1 - 20)</h2>
+                    <div class="slots-container" id="slotsGrid">
+                        <!-- Filled by JavaScript -->
                     </div>
                 </div>
+
             </div>
 
         </div>
 
-        <!-- ============================================================= -->
-        <!-- TABLES SECTION: Active Parked Vehicles & History Logs         -->
-        <!-- ============================================================= -->
-        <section class="tables-section">
-            
-            <!-- ACTIVE PARKED VEHICLES TABLE -->
-            <div class="card mb-4">
-                <div class="card-header flex-between">
-                    <h3><span class="icon">🚘</span> Currently Parked Vehicles</h3>
-                    <span class="badge badge-primary" id="activeCountBadge">0 Active</span>
-                </div>
-                <div class="card-body table-responsive">
-                    <table class="data-table" id="activeVehiclesTable">
-                        <thead>
-                            <tr>
-                                <th>Slot</th>
-                                <th>Vehicle No.</th>
-                                <th>Owner Name</th>
-                                <th>Category</th>
-                                <th>Entry Time</th>
-                                <th>Parked For</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="activeVehiclesBody">
-                            <tr>
-                                <td colspan="7" class="text-center empty-state">No vehicles currently parked.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+        <!-- Parked Vehicles Table -->
+        <div class="card table-card">
+            <h2>Currently Parked Vehicles</h2>
+            <div class="table-wrapper">
+                <table id="vehiclesTable">
+                    <thead>
+                        <tr>
+                            <th>Slot #</th>
+                            <th>Vehicle Number</th>
+                            <th>Owner Name</th>
+                            <th>Type</th>
+                            <th>Entry Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Filled by JavaScript -->
+                    </tbody>
+                </table>
             </div>
+        </div>
 
-            <!-- CHECKOUT TRANSACTION HISTORY LOGS -->
-            <div class="card">
-                <div class="card-header flex-between">
-                    <h3><span class="icon">📜</span> Recent Transaction History</h3>
-                    <button id="btnClearHistory" class="btn btn-secondary btn-sm">Clear History</button>
-                </div>
-                <div class="card-body table-responsive">
-                    <table class="data-table" id="historyTable">
-                        <thead>
-                            <tr>
-                                <th>Invoice ID</th>
-                                <th>Slot</th>
-                                <th>Vehicle No.</th>
-                                <th>Owner</th>
-                                <th>Category</th>
-                                <th>Duration</th>
-                                <th>Amount Paid</th>
-                                <th>Exit Timestamp</th>
-                            </tr>
-                        </thead>
-                        <tbody id="historyBody">
-                            <tr>
-                                <td colspan="8" class="text-center empty-state">No transactions recorded yet.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    </div>
 
-        </section>
-    </main>
-
-    <!-- ================================================================= -->
-    <!-- MODAL 1: Check-In Entry Slip Modal                                -->
-    <!-- ================================================================= -->
-    <div class="modal-overlay" id="slipModal" aria-hidden="true">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3>🎫 Parking Entry Slip</h3>
-                <button class="modal-close" onclick="closeModal('slipModal')">&times;</button>
+    <!-- Bill / Receipt Modal -->
+    <div id="billModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="billDetails">
+                <!-- Filled on unpark -->
             </div>
-            <div class="modal-body slip-content" id="slipModalContent">
-                <!-- Injected via JavaScript -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('slipModal')">Close</button>
-                <button class="btn btn-primary" onclick="window.print()">🖨️ Print Slip</button>
-            </div>
+            <button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
+            <button class="btn btn-secondary" onclick="closeModal()">Close</button>
         </div>
     </div>
 
-    <!-- ================================================================= -->
-    <!-- MODAL 2: Check-Out Invoice & Payment Modal                        -->
-    <!-- ================================================================= -->
-    <div class="modal-overlay" id="invoiceModal" aria-hidden="true">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3>🧾 Check-Out Invoice</h3>
-                <button class="modal-close" onclick="closeModal('invoiceModal')">&times;</button>
-            </div>
-            <div class="modal-body invoice-content" id="invoiceModalContent">
-                <!-- Injected via JavaScript -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('invoiceModal')">Done</button>
-                <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================================================================= -->
-    <!-- FOOTER                                                            -->
-    <!-- ================================================================= -->
-    <footer class="app-footer">
-        <div class="footer-container">
-            <p>🚗 <strong>ParkEasy</strong> - Smart Vehicle Parking Management System</p>
-            <p class="footer-sub">Built with Clean HTML5, Modern Vanilla CSS & Object-Oriented JavaScript</p>
-        </div>
+    <!-- Footer -->
+    <footer>
+        <p>Vehicle Parking Management System Project | Built with HTML, CSS, JS & C++</p>
     </footer>
 
-    <!-- JavaScript Application Logic -->
     <script src="app.js"></script>
 </body>
 </html>
