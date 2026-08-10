@@ -1,0 +1,785 @@
+/* ==========================================================================
+   PARKEASY - VEHICLE PARKING MANAGEMENT SYSTEM
+   Modern, Clean, Responsive Vanilla CSS Design System
+   ========================================================================== */
+
+/* --- 1. CSS VARIABLES (DESIGN TOKENS) --- */
+:root {
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --primary-light: #eff6ff;
+    --secondary: #64748b;
+    --secondary-hover: #475569;
+    --success: #10b981;
+    --success-bg: #ecfdf5;
+    --warning: #f59e0b;
+    --warning-bg: #fffbeb;
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --dark: #0f172a;
+    --slate-800: #1e293b;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+    --slate-50: #f8fafc;
+    --white: #ffffff;
+    
+    --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- 2. GLOBAL RESET & BASE STYLES --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--slate-50);
+    color: var(--slate-800);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- 3. HEADER & NAVIGATION --- */
+.app-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: var(--white);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.logo-icon {
+    font-size: 2.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--radius-md);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.brand-logo h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+}
+
+.tagline {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.live-clock {
+    font-family: monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.1);
+    color: #38bdf8;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* --- 4. LAYOUT & CONTAINERS --- */
+.main-container {
+    max-width: 1300px;
+    margin: 1.5rem auto;
+    padding: 0 1.25rem;
+    width: 100%;
+    flex: 1;
+}
+
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.column-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.column-right {
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- 5. STATS CARDS --- */
+.stat-card {
+    background: var(--white);
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--slate-200);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    font-size: 1.75rem;
+    width: 3.25rem;
+    height: 3.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+}
+
+.total-icon { background: #e0f2fe; color: #0284c7; }
+.occupied-icon { background: #fee2e2; color: #dc2626; }
+.free-icon { background: #dcfce7; color: #16a34a; }
+.served-icon { background: #f3e8ff; color: #9333ea; }
+.revenue-icon { background: #fef9c3; color: #ca8a04; }
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.2;
+}
+
+.stat-sub {
+    font-size: 0.75rem;
+    color: var(--secondary);
+    font-weight: 500;
+}
+
+.text-primary { color: var(--primary) !important; }
+.text-success { color: var(--success) !important; }
+.text-danger { color: var(--danger) !important; }
+
+/* --- 6. CARDS & PANELS --- */
+.card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--slate-200);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--slate-200);
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-header h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-subtitle {
+    font-size: 0.8rem;
+    color: var(--secondary);
+    margin-top: 0.2rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* --- 7. BUTTONS & BADGES --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.65rem 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    gap: 0.4rem;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.35);
+}
+
+.btn-secondary {
+    background: var(--slate-100);
+    color: var(--slate-700);
+    border-color: var(--slate-200);
+}
+
+.btn-secondary:hover {
+    background: var(--slate-200);
+    color: var(--dark);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: var(--white);
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+}
+
+.badge-primary { background: var(--primary-light); color: var(--primary-hover); }
+.badge-success { background: var(--success-bg); color: var(--success); }
+.badge-danger { background: var(--danger-bg); color: var(--danger); }
+.badge-warning { background: var(--warning-bg); color: var(--warning); }
+
+/* --- 8. FORMS & INPUTS --- */
+.form-group {
+    margin-bottom: 1.1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--slate-700);
+    margin-bottom: 0.35rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-md);
+    background-color: var(--slate-50);
+    color: var(--slate-800);
+    transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--secondary);
+    margin-top: 0.25rem;
+}
+
+/* --- 9. TARIFF CARD --- */
+.tariff-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.tariff-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background: var(--slate-50);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--primary);
+}
+
+.tariff-type {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--slate-700);
+}
+
+.tariff-price {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+/* --- 10. 2D PARKING LOT GRID --- */
+.legend {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dot-free { background-color: var(--success); }
+.dot-occupied { background-color: var(--danger); }
+
+.parking-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .parking-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .parking-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.parking-slot {
+    border-radius: var(--radius-md);
+    padding: 1rem 0.85rem;
+    border: 2px dashed var(--slate-200);
+    background: var(--slate-50);
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 110px;
+}
+
+.parking-slot:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Free Slot State */
+.parking-slot.slot-free {
+    border-color: #a7f3d0;
+    background: #f0fdf4;
+}
+
+.parking-slot.slot-free:hover {
+    border-color: var(--success);
+    background: #dcfce7;
+}
+
+/* Occupied Slot State */
+.parking-slot.slot-occupied {
+    border-color: #fecaca;
+    background: #fef2f2;
+    border-style: solid;
+}
+
+.parking-slot.slot-occupied:hover {
+    border-color: var(--danger);
+    background: #fee2e2;
+}
+
+.slot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.slot-number {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--slate-600);
+}
+
+.slot-status-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+}
+
+.slot-free .slot-status-badge {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.slot-occupied .slot-status-badge {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.slot-body {
+    text-align: center;
+    margin: 0.25rem 0;
+}
+
+.slot-icon {
+    font-size: 1.6rem;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.slot-reg {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -0.01em;
+    word-break: break-all;
+}
+
+.slot-owner {
+    font-size: 0.75rem;
+    color: var(--secondary);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.slot-footer {
+    font-size: 0.7rem;
+    color: var(--slate-600);
+    text-align: center;
+    margin-top: 0.4rem;
+    font-weight: 600;
+}
+
+/* --- 11. TABLES SECTION --- */
+.tables-section {
+    margin-bottom: 2.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: var(--slate-100);
+    color: var(--slate-700);
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--slate-200);
+}
+
+.data-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--slate-200);
+    color: var(--slate-800);
+}
+
+.data-table tbody tr:hover {
+    background-color: var(--slate-50);
+}
+
+.empty-state {
+    color: var(--secondary);
+    padding: 2rem !important;
+    font-style: italic;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* --- 12. MODALS --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-card {
+    background: var(--white);
+    width: 90%;
+    max-width: 480px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: var(--transition);
+}
+
+.modal-overlay.active .modal-card {
+    transform: scale(1);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: var(--white);
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--white);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 0.85rem 1.25rem;
+    background: var(--slate-50);
+    border-top: 1px solid var(--slate-200);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+/* Receipt / Slip Box Styling */
+.ticket-box {
+    border: 2px dashed var(--slate-200);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    background: #fafafa;
+}
+
+.ticket-header {
+    text-align: center;
+    border-bottom: 1px dashed var(--slate-300);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.ticket-header h4 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.ticket-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.ticket-row .label {
+    color: var(--secondary);
+    font-weight: 500;
+}
+
+.ticket-row .value {
+    color: var(--dark);
+    font-weight: 700;
+}
+
+.ticket-total {
+    border-top: 1px dashed var(--slate-300);
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+/* --- 13. FOOTER --- */
+.app-footer {
+    background: var(--slate-800);
+    color: #94a3b8;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    font-size: 0.85rem;
+    border-top: 1px solid var(--slate-700);
+    margin-top: auto;
+}
+
+.app-footer strong {
+    color: var(--white);
+}
+
+.footer-sub {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    color: #64748b;
+}
+
+/* --- 14. PRINT STYLES --- */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .modal-overlay.active,
+    .modal-overlay.active * {
+        visibility: visible;
+    }
+    .modal-overlay.active {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: auto;
+        background: transparent;
+    }
+    .modal-card {
+        box-shadow: none;
+        border: 1px solid #000;
+        width: 100%;
+        max-width: 100%;
+    }
+    .modal-footer,
+    .modal-close {
+        display: none !important;
+    }
+}

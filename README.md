@@ -1,11 +1,14 @@
 # 🚗 Smart Vehicle Parking Management System
 
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-11%20%7C%2014%20%7C%2017%20%7C%2020-00599C?style=for-the-badge&logo=c%2B%2B)](https://en.cppreference.com/)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue?style=for-the-badge)](https://github.com/premsagarpandey/vehical-parking-cpp-project)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=for-the-badge)](https://github.com/premsagarpandey/vehical-parking-cpp-project)
 
-A high-performance, object-oriented, console-based **Vehicle Parking Management System** developed in **C++**. Designed for parking lots and commercial garages, it features automated check-in with digital slips, dynamic duration-based billing, a 2D interactive ASCII parking grid map, persistent file storage, and real-time revenue analytics.
+A complete **Vehicle Parking Management System** featuring both a high-performance **C++ Console Engine** and a clean, beginner-friendly **Interactive Web Interface (HTML5, CSS3, & Vanilla JavaScript)**.
+
+Designed for parking lots and commercial garages, it features automated check-in with digital entry slips, dynamic duration-based billing, a 2D interactive parking grid map, persistent storage, and real-time revenue analytics.
 
 ---
 
@@ -13,12 +16,14 @@ A high-performance, object-oriented, console-based **Vehicle Parking Management 
 
 - **🚗 Multi-Category Vehicle Support**: Handles 2-Wheelers (Bikes/Scooters), 4-Wheelers (Cars/SUVs), and Heavy Vehicles (Buses/Trucks).
 - **🎫 Automated Check-In & Entry Slips**: Automatically finds the nearest free slot, assigns spot IDs, prevents duplicate registrations, and generates a formatted entry slip.
-- **💳 Smart Checkout & Billing Engine**: Computes exact parking duration (hours/mins) and calculates tiered hourly pricing with printed invoices.
-- **🗺️ Visual 2D Lot Map**: Real-time ASCII grid visualization of occupied vs. free slots (`[FREE]` vs `[DL-01-AB-1234]`).
-- **💾 Automatic Data Persistence**: Preserves active vehicles, historical checkout audits, and lifetime revenue metrics across app restarts using local flat files.
+- **💳 Smart Checkout & Billing Engine**: Computes exact parking duration (hours/mins) and calculates tiered hourly pricing with printed receipts.
+- **🗺️ Interactive 2D Lot Map**: Real-time visualization of occupied vs. free slots (`[FREE]` vs `[Occupied]`).
+- **🌐 Beginner-Friendly Web UI**: Open `index.html` in any browser — zero build tools or dependencies needed!
+- **💾 Dual Persistence**:
+  - **C++ Engine**: Auto-saves to local flat files (`parking_records.txt`, `parking_history.txt`, `parking_stats.txt`).
+  - **Web Frontend**: Uses browser `localStorage` to keep data persistent across page reloads.
 - **🔍 Fast Search & Lookup**: Instant vehicle search by license plate number or owner's name.
 - **📈 Analytics Dashboard**: Live summary of lot occupancy rate, vehicle type breakdown, total vehicles served, and collected revenue.
-- **🛡️ Crash-Proof Input Validation**: Safe stream parsing protects against invalid user inputs and unexpected crashes.
 
 ---
 
@@ -32,7 +37,45 @@ A high-performance, object-oriented, console-based **Vehicle Parking Management 
 
 ---
 
-## 🖥️ Preview & Interface
+## 🚀 Quick Start Guide
+
+### 🌐 Option 1: Run the Web Interface (Beginner-Friendly)
+No compilation or server setup is required!
+1. Clone or download the repository:
+   ```bash
+   git clone https://github.com/premsagarpandey/vehical-parking-cpp-project.git
+   cd vehical-parking-cpp-project
+   ```
+2. Double-click **`index.html`** or open it with any web browser (Chrome, Edge, Firefox, Safari).
+
+---
+
+### ⚙️ Option 2: Run the C++ Console Engine
+**Prerequisites**: Any C++ compiler supporting **C++11 or higher** (`g++`, `clang++`, or `MSVC`).
+
+1. **Compile the Code**:
+   - **GCC / MinGW / Clang**:
+     ```bash
+     g++ -std=c++11 -O2 -Wall main.cpp -o parking_system
+     ```
+   - **MSVC (Windows Developer Command Prompt)**:
+     ```cmd
+     cl /EHsc /std:c++14 main.cpp /Fe:parking_system.exe
+     ```
+
+2. **Run the Executable**:
+   - **Windows**:
+     ```powershell
+     .\parking_system.exe
+     ```
+   - **Linux / macOS**:
+     ```bash
+     ./parking_system
+     ```
+
+---
+
+## 🖥️ Terminal Interface Preview
 
 ### 📌 Main Menu
 ```text
@@ -50,19 +93,6 @@ A high-performance, object-oriented, console-based **Vehicle Parking Management 
 ========================================================
 ```
 
-### 🗺️ Visual Parking Grid
-```text
-+---------------------------------------------------------------------------------------+
-|                               PARKING LOT REAL-TIME MAP                               |
-+---------------------------------------------------------------------------------------+
-|  Slot 01: [DL01AB1234]  |  Slot 02: [FREE]        |  Slot 03: [MH12CD5678]  |  Slot 04: [FREE]        |
-|  Slot 05: [FREE]        |  Slot 06: [FREE]        |  Slot 07: [KA05EF9012]  |  Slot 08: [FREE]        |
-|  Slot 09: [FREE]        |  Slot 10: [FREE]        |  Slot 11: [FREE]        |  Slot 12: [FREE]        |
-|  Slot 13: [FREE]        |  Slot 14: [FREE]        |  Slot 15: [FREE]        |  Slot 16: [FREE]        |
-|  Slot 17: [FREE]        |  Slot 18: [FREE]        |  Slot 19: [FREE]        |  Slot 20: [FREE]        |
-+---------------------------------------------------------------------------------------+
-```
-
 ### 🧾 Check-Out Invoice Sample
 ```text
 ========================================================
@@ -71,7 +101,7 @@ A high-performance, object-oriented, console-based **Vehicle Parking Management 
  Invoice ID     : INV-1723301824
  Slot Number    : 3
  Reg Number     : DL 01 AB 1234
- Owner Name     : John Doe
+ Owner Name     : Rahul Sharma
  Vehicle Type   : 4-Wheeler (Car/SUV)
  Entry Time     : 2026-08-10 17:30:00
  Exit Time      : 2026-08-10 19:30:00
@@ -85,56 +115,19 @@ A high-performance, object-oriented, console-based **Vehicle Parking Management 
 
 ---
 
-## 🚀 Getting Started
-
-### Prerequisites
-- Any C++ compiler supporting **C++11 or higher** (`g++`, `clang++`, or `MSVC`).
-
-### 📦 Installation & Setup
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/premsagarpandey/vehical-parking-cpp-project.git
-   cd vehical-parking-cpp-project
-   ```
-
-2. **Compile the Code**
-   - **GCC / MinGW / Clang**:
-     ```bash
-     g++ -std=c++11 -O2 -Wall main.cpp -o parking_system
-     ```
-   - **MSVC (Windows Developer Command Prompt)**:
-     ```cmd
-     cl /EHsc /std:c++14 main.cpp /Fe:parking_system.exe
-     ```
-
-3. **Run the Executable**
-   - **Windows**:
-     ```powershell
-     .\parking_system.exe
-     ```
-   - **Linux / macOS**:
-     ```bash
-     ./parking_system
-     ```
-
----
-
-## 🏗️ Project Architecture
+## 🏗️ Project Structure
 
 ```
 .
-├── main.cpp              # Core source code (OOP classes, logic & UI)
+├── index.html            # Beginner-friendly Web UI Structure
+├── style.css             # Modern, responsive styling system
+├── app.js                # Frontend logic & LocalStorage persistence
+├── main.cpp              # C++ Engine (OOP classes, file I/O & logic)
 ├── README.md             # Documentation
-├── parking_records.txt   # Active parking records (auto-created on run)
-├── parking_history.txt   # Audit trail of checkout transactions
-└── parking_stats.txt     # Cumulative revenue & stats state
+├── parking_records.txt   # Active parking records (C++ auto-generated)
+├── parking_history.txt   # Audit trail of transactions (C++ auto-generated)
+└── parking_stats.txt     # Cumulative revenue & stats (C++ auto-generated)
 ```
-
-### Core OOP Classes
-- `Vehicle`: Encapsulates vehicle attributes (registration number, owner name, vehicle category, entry timestamp).
-- `ParkingSpot`: Represents individual lot slots, status tracking, and vehicle association.
-- `ParkingSystem`: Orchestrates parking operations, search queries, dynamic billing calculations, real-time grid generation, and file I/O.
 
 ---
 
