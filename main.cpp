@@ -4,6 +4,7 @@
 #include <fstream>
 #include <ctime>
 #include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
@@ -376,6 +377,12 @@ int main() {
                 break;
             default:
                 cout << "\nInvalid choice! Please enter 1 to 6.\n";
+        }
+
+        if (choice != 6) {
+            cout << "\n";
+            system("pause"); // user se wait karayega taaki output padh sake
+            system("cls");   // screen clear kar dega
         }
     }
 
