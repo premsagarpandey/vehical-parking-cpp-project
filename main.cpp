@@ -11,6 +11,13 @@ using namespace std;
 // Maximum parking slots available in the lot
 const int MAX_SLOTS = 20;
 
+// ANSI Color Codes for Console
+const string RESET = "\033[0m";
+const string RED = "\033[31m";
+const string GREEN = "\033[32m";
+const string YELLOW = "\033[33m";
+const string CYAN = "\033[36m";
+
 // Structure to store vehicle details
 struct Vehicle {
     int slotNo;
@@ -116,13 +123,13 @@ void loadData() {
 // Option 1: Park a new vehicle
 void parkVehicle() {
     if ((int)parkedList.size() >= MAX_SLOTS) {
-        cout << "\nSorry! Parking lot is completely full.\n";
+        cout << RED << "\nSorry! Parking lot is completely full." << RESET << "\n";
         return;
     }
 
     int freeSlot = findFreeSlot();
     if (freeSlot == -1) {
-        cout << "\nNo free slot available!\n";
+        cout << RED << "\nNo free slot available!" << RESET << "\n";
         return;
     }
 
@@ -134,12 +141,12 @@ void parkVehicle() {
     getline(cin, v.vehicleNo);
 
     if (v.vehicleNo.empty()) {
-        cout << "Error: Vehicle number cannot be empty!\n";
+        cout << RED << "Error: Vehicle number cannot be empty!" << RESET << "\n";
         return;
     }
 
     if (isAlreadyParked(v.vehicleNo)) {
-        cout << "Error: Vehicle with number \"" << v.vehicleNo << "\" is already parked!\n";
+        cout << RED << "Error: Vehicle with number \"" << v.vehicleNo << "\" is already parked!" << RESET << "\n";
         return;
     }
 
@@ -170,14 +177,14 @@ void parkVehicle() {
     cout << "Owner Name   : " << v.ownerName << endl;
     cout << "Vehicle Type : " << getVehicleTypeName(v.type) << endl;
     cout << "Rate / Hour  : Rs " << getRatePerHour(v.type) << endl;
-    cout << "Status       : Parked Successfully!\n";
+    cout << "Status       : " << GREEN << "Parked Successfully!" << RESET << "\n";
     cout << "----------------------------------------\n";
 }
 
 // Option 2: Unpark vehicle and generate bill
 void unparkVehicle() {
     if (parkedList.empty()) {
-        cout << "\nParking lot is empty! No vehicles to unpark.\n";
+        cout << RED << "\nParking lot is empty! No vehicles to unpark." << RESET << "\n";
         return;
     }
 
@@ -215,7 +222,7 @@ void unparkVehicle() {
     }
 
     if (index == -1) {
-        cout << "\nVehicle not found in the parking lot!\n";
+        cout << RED << "\nVehicle not found in the parking lot!" << RESET << "\n";
         return;
     }
 
@@ -252,13 +259,13 @@ void unparkVehicle() {
     cout << "TOTAL AMOUNT : Rs " << totalBill << endl;
     cout << "Payment      : PAID (Cash / UPI)\n";
     cout << "========================================\n";
-    cout << "Vehicle unparked successfully! Slot #" << v.slotNo << " is now free.\n";
+    cout << GREEN << "Vehicle unparked successfully! Slot #" << v.slotNo << " is now free." << RESET << "\n";
 }
 
 // Option 3: Display all parked vehicles
 void showParkedVehicles() {
     if (parkedList.empty()) {
-        cout << "\nNo vehicles currently parked in the lot.\n";
+        cout << YELLOW << "\nNo vehicles currently parked in the lot." << RESET << "\n";
         return;
     }
 
@@ -277,7 +284,7 @@ void showParkedVehicles() {
 // Option 4: Search for a vehicle
 void searchVehicle() {
     if (parkedList.empty()) {
-        cout << "\nParking lot is empty!\n";
+        cout << RED << "\nParking lot is empty!" << RESET << "\n";
         return;
     }
 
@@ -292,7 +299,7 @@ void searchVehicle() {
             parkedList[i].ownerName.find(searchKey) != string::npos) {
             
             if (!found) {
-                cout << "\nMatching Vehicle(s) Found:\n";
+                cout << GREEN << "\nMatching Vehicle(s) Found:" << RESET << "\n";
                 cout << "----------------------------------------\n";
             }
             found = true;
@@ -305,7 +312,7 @@ void searchVehicle() {
     }
 
     if (!found) {
-        cout << "\nNo vehicle found matching \"" << searchKey << "\".\n";
+        cout << RED << "\nNo vehicle found matching \"" << searchKey << "\"." << RESET << "\n";
     }
 }
 
@@ -343,9 +350,9 @@ int main() {
 
     int choice = 0;
     while (choice != 6) {
-        cout << "\n=====================================\n";
+        cout << CYAN << "\n=====================================\n";
         cout << "  VEHICLE PARKING MANAGEMENT SYSTEM  \n";
-        cout << "=====================================\n";
+        cout << "=====================================\n" << RESET;
         cout << "1. Park Vehicle\n";
         cout << "2. Unpark Vehicle & Bill\n";
         cout << "3. View All Parked Vehicles\n";
@@ -373,10 +380,10 @@ int main() {
                 showStats();
                 break;
             case 6:
-                cout << "\nExiting... Thank you for using the system!\n";
+                cout << CYAN << "\nExiting... Thank you for using the system!" << RESET << "\n";
                 break;
             default:
-                cout << "\nInvalid choice! Please enter 1 to 6.\n";
+                cout << RED << "\nInvalid choice! Please enter 1 to 6." << RESET << "\n";
         }
 
         if (choice != 6) {
