@@ -20,23 +20,7 @@ function loadData() {
     if (savedVehicles) {
         parkedVehicles = JSON.parse(savedVehicles);
     } else {
-        // Initial sample data if opening for the first time
-        parkedVehicles = [
-            {
-                slotNo: 1,
-                vehicleNo: "DL 01 AB 1234",
-                ownerName: "Rahul Sharma",
-                type: 2,
-                entryTime: new Date(Date.now() - 2 * 3600 * 1000).toISOString()
-            },
-            {
-                slotNo: 3,
-                vehicleNo: "MH 12 CD 5678",
-                ownerName: "Priya Patel",
-                type: 1,
-                entryTime: new Date(Date.now() - 1 * 3600 * 1000).toISOString()
-            }
-        ];
+        parkedVehicles = [];
     }
 
     if (savedRevenue) {

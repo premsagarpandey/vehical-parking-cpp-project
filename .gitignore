@@ -1,0 +1,8 @@
+*.exe
+*.o
+*.out
+*.log
+parking_data.txt
+parking_history.txt
+parking_records.txt
+parking_stats.txt
