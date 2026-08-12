@@ -344,6 +344,24 @@ void showStats() {
     cout << "========================================\n";
 }
 
+// Option 7: Clear all parking records
+void clearAllRecords() {
+    cout << RED << "\nWARNING: Are you sure you want to clear ALL records?" << RESET << "\n";
+    cout << "This will delete all currently parked vehicles, total revenue, and service count.\n";
+    cout << "Type 'YES' to confirm: ";
+    string confirm;
+    cin >> confirm;
+    if (confirm == "YES") {
+        parkedList.clear();
+        totalVehiclesServiced = 0;
+        totalRevenue = 0.0;
+        saveData();
+        cout << GREEN << "\nAll records have been cleared successfully! Fresh start initialized." << RESET << "\n";
+    } else {
+        cout << YELLOW << "\nOperation cancelled. Records are safe." << RESET << "\n";
+    }
+}
+
 // Main Menu
 int main() {
     loadData();
@@ -359,8 +377,9 @@ int main() {
         cout << "4. Search Vehicle\n";
         cout << "5. View Parking Report\n";
         cout << "6. Exit\n";
+        cout << "7. Clear All Records\n";
         cout << "-------------------------------------\n";
-        cout << "Enter your choice (1-6): ";
+        cout << "Enter your choice (1-7): ";
         cin >> choice;
 
         switch (choice) {
@@ -382,8 +401,11 @@ int main() {
             case 6:
                 cout << CYAN << "\nExiting... Thank you for using the system!" << RESET << "\n";
                 break;
+            case 7:
+                clearAllRecords();
+                break;
             default:
-                cout << RED << "\nInvalid choice! Please enter 1 to 6." << RESET << "\n";
+                cout << RED << "\nInvalid choice! Please enter 1 to 7." << RESET << "\n";
         }
 
         if (choice != 6) {
