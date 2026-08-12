@@ -270,15 +270,20 @@ void showParkedVehicles() {
     }
 
     cout << "\n--- CURRENTLY PARKED VEHICLES (" << parkedList.size() << "/" << MAX_SLOTS << ") ---\n";
-    cout << "Slot\tVehicle No\t\tOwner Name\t\tType\n";
-    cout << "--------------------------------------------------------------------\n";
+    cout << "Slot\tVehicle No\t\tOwner Name\t\tType\t\t\tEntry Time\n";
+    cout << "----------------------------------------------------------------------------------------\n";
     for (int i = 0; i < (int)parkedList.size(); i++) {
+        char timeStr[50];
+        struct tm* tm_info = localtime(&parkedList[i].entryTime);
+        strftime(timeStr, 50, "%I:%M %p", tm_info);
+
         cout << parkedList[i].slotNo << "\t"
              << parkedList[i].vehicleNo << "\t\t"
              << parkedList[i].ownerName << "\t\t"
-             << getVehicleTypeName(parkedList[i].type) << "\n";
+             << getVehicleTypeName(parkedList[i].type) << "\t"
+             << timeStr << "\n";
     }
-    cout << "--------------------------------------------------------------------\n";
+    cout << "----------------------------------------------------------------------------------------\n";
 }
 
 // Option 4: Search for a vehicle
