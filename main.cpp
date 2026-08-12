@@ -5,6 +5,7 @@
 #include <ctime>
 #include <cmath>
 #include <cstdlib>
+#include <iomanip>
 
 using namespace std;
 
@@ -270,20 +271,24 @@ void showParkedVehicles() {
     }
 
     cout << "\n--- CURRENTLY PARKED VEHICLES (" << parkedList.size() << "/" << MAX_SLOTS << ") ---\n";
-    cout << "Slot\tVehicle No\t\tOwner Name\t\tType\t\t\tEntry Time\n";
-    cout << "----------------------------------------------------------------------------------------\n";
+    cout << left << setw(8) << "Slot" 
+         << setw(18) << "Vehicle No" 
+         << setw(20) << "Owner Name" 
+         << setw(20) << "Type" 
+         << "Entry Time\n";
+    cout << "--------------------------------------------------------------------------------\n";
     for (int i = 0; i < (int)parkedList.size(); i++) {
         char timeStr[50];
         struct tm* tm_info = localtime(&parkedList[i].entryTime);
         strftime(timeStr, 50, "%I:%M %p", tm_info);
 
-        cout << parkedList[i].slotNo << "\t"
-             << parkedList[i].vehicleNo << "\t\t"
-             << parkedList[i].ownerName << "\t\t"
-             << getVehicleTypeName(parkedList[i].type) << "\t"
+        cout << left << setw(8) << parkedList[i].slotNo
+             << setw(18) << parkedList[i].vehicleNo
+             << setw(20) << parkedList[i].ownerName
+             << setw(20) << getVehicleTypeName(parkedList[i].type)
              << timeStr << "\n";
     }
-    cout << "----------------------------------------------------------------------------------------\n";
+    cout << "--------------------------------------------------------------------------------\n";
 }
 
 // Option 4: Search for a vehicle
@@ -308,10 +313,16 @@ void searchVehicle() {
                 cout << "----------------------------------------\n";
             }
             found = true;
+            
+            char timeStr[50];
+            struct tm* tm_info = localtime(&parkedList[i].entryTime);
+            strftime(timeStr, 50, "%I:%M %p", tm_info);
+
             cout << "Slot Number  : " << parkedList[i].slotNo << endl;
             cout << "Vehicle No   : " << parkedList[i].vehicleNo << endl;
             cout << "Owner Name   : " << parkedList[i].ownerName << endl;
             cout << "Vehicle Type : " << getVehicleTypeName(parkedList[i].type) << endl;
+            cout << "Entry Time   : " << timeStr << endl;
             cout << "----------------------------------------\n";
         }
     }
