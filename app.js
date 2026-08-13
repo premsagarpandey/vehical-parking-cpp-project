@@ -307,5 +307,18 @@ document.getElementById("searchInput").addEventListener("input", function(e) {
     displayTable(q);
 });
 
+// Live Digital Clock
+function updateClock() {
+    let clockElement = document.getElementById("liveClock");
+    if (clockElement) {
+        let now = new Date();
+        clockElement.innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+    }
+}
+
 // Run when page loads
-window.onload = loadData;
+window.onload = function() {
+    loadData();
+    updateClock(); // Initial call
+    setInterval(updateClock, 1000); // Update every second
+};
