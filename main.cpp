@@ -6,6 +6,9 @@
 #include <cmath>
 #include <cstdlib>
 #include <iomanip>
+#include <algorithm>
+#include <limits>
+#include <cctype>
 
 using namespace std;
 
@@ -33,6 +36,83 @@ vector<Vehicle> parkedList;
 int totalVehiclesServiced = 0;
 double totalRevenue = 0.0;
 
+// Helper: Trim leading and trailing whitespace
+string trim(const string& str) {
+    size_t first = str.find_first_not_of(" \t\r\n");
+    if (first == string::npos) return "";
+    size_t last = str.find_last_not_of(" \t\r\n");
+    return str.substr(first, (last - first + 1));
+}
+
+// Helper: Convert string to uppercase
+string toUpper(string str) {
+    for (char &c : str) {
+        c = (char)toupper((unsigned char)c);
+    }
+    return str;
+}
+
+// Helper: Convert string to lowercase
+string toLower(string str) {
+    for (char &c : str) {
+        c = (char)tolower((unsigned char)c);
+    }
+    return str;
+}
+
+// Helper: Clear input stream buffer safely
+void clearInputBuffer() {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+// Helper: Read an integer within range safely (prevents infinite loops)
+int readInt(const string& prompt, int minVal, int maxVal) {
+    int val;
+    while (true) {
+        cout << prompt;
+        if (cin >> val) {
+            clearInputBuffer();
+            if (val >= minVal && val <= maxVal) {
+                return val;
+            }
+            cout << RED << "Please enter a number between " << minVal << " and " << maxVal << "." << RESET << "\n";
+        } else {
+            cout << RED << "Invalid input! Please enter a valid number." << RESET << "\n";
+            clearInputBuffer();
+        }
+    }
+}
+
+// Helper: Read a non-empty string
+string readLine(const string& prompt) {
+    string input;
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+        input = trim(input);
+        if (!input.empty()) {
+            return input;
+        }
+        cout << RED << "Input cannot be empty. Please try again." << RESET << "\n";
+    }
+}
+
+// Cross-platform screen pause
+void pauseScreen() {
+    cout << "\nPress Enter to continue...";
+    cin.get();
+}
+
+// Cross-platform screen clear
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
 // Function to convert vehicle type number to readable name
 string getVehicleTypeName(int type) {
     if (type == 1) return "Bike (2-Wheeler)";
@@ -49,11 +129,11 @@ double getRatePerHour(int type) {
     return 30.0;
 }
 
-// Check if a vehicle with the given number is already parked
-bool isAlreadyParked(string vNo) {
-    int total = (int)parkedList.size();
-    for (int i = 0; i < total; i++) {
-        if (parkedList[i].vehicleNo == vNo) {
+// Check if a vehicle with the given number is already parked (case-insensitive)
+bool isAlreadyParked(const string& vNo) {
+    string normVNo = toUpper(trim(vNo));
+    for (size_t i = 0; i < parkedList.size(); i++) {
+        if (toUpper(parkedList[i].vehicleNo) == normVNo) {
             return true;
         }
     }
@@ -62,10 +142,9 @@ bool isAlreadyParked(string vNo) {
 
 // Find the first empty slot number (from 1 to MAX_SLOTS)
 int findFreeSlot() {
-    int total = (int)parkedList.size();
     for (int slot = 1; slot <= MAX_SLOTS; slot++) {
         bool occupied = false;
-        for (int i = 0; i < total; i++) {
+        for (size_t i = 0; i < parkedList.size(); i++) {
             if (parkedList[i].slotNo == slot) {
                 occupied = true;
                 break;
@@ -78,20 +157,29 @@ int findFreeSlot() {
     return -1; // parking is full
 }
 
+// Format timestamp into readable date and time
+string formatTime(time_t t) {
+    char buffer[64];
+    struct tm* tm_info = localtime(&t);
+    if (!tm_info) return "N/A";
+    strftime(buffer, sizeof(buffer), "%d-%b-%Y %I:%M %p", tm_info);
+    return string(buffer);
+}
+
 // Save records to a text file
 void saveData() {
     ofstream outFile("parking_data.txt");
     if (!outFile) {
         return;
     }
-    outFile << totalVehiclesServiced << " " << totalRevenue << endl;
-    outFile << parkedList.size() << endl;
-    for (int i = 0; i < (int)parkedList.size(); i++) {
-        outFile << parkedList[i].slotNo << endl;
-        outFile << parkedList[i].vehicleNo << endl;
-        outFile << parkedList[i].ownerName << endl;
-        outFile << parkedList[i].type << endl;
-        outFile << parkedList[i].entryTime << endl;
+    outFile << totalVehiclesServiced << " " << fixed << setprecision(2) << totalRevenue << "\n";
+    outFile << parkedList.size() << "\n";
+    for (size_t i = 0; i < parkedList.size(); i++) {
+        outFile << parkedList[i].slotNo << "\n";
+        outFile << parkedList[i].vehicleNo << "\n";
+        outFile << parkedList[i].ownerName << "\n";
+        outFile << parkedList[i].type << "\n";
+        outFile << parkedList[i].entryTime << "\n";
     }
     outFile.close();
 }
@@ -108,12 +196,12 @@ void loadData() {
             parkedList.clear();
             for (int i = 0; i < count; i++) {
                 Vehicle v;
-                inFile >> v.slotNo;
-                inFile.ignore();
-                getline(inFile, v.vehicleNo);
-                getline(inFile, v.ownerName);
-                inFile >> v.type;
-                inFile >> v.entryTime;
+                if (!(inFile >> v.slotNo)) break;
+                inFile.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (!getline(inFile, v.vehicleNo)) break;
+                if (!getline(inFile, v.ownerName)) break;
+                if (!(inFile >> v.type)) break;
+                if (!(inFile >> v.entryTime)) break;
                 parkedList.push_back(v);
             }
         }
@@ -137,35 +225,22 @@ void parkVehicle() {
     Vehicle v;
     v.slotNo = freeSlot;
 
-    cin.ignore();
-    cout << "\nEnter Vehicle Registration Number (e.g. DL 01 AB 1234): ";
-    getline(cin, v.vehicleNo);
-
-    if (v.vehicleNo.empty()) {
-        cout << RED << "Error: Vehicle number cannot be empty!" << RESET << "\n";
+    string vNo = toUpper(readLine("\nEnter Vehicle Registration Number (e.g. DL 01 AB 1234): "));
+    if (isAlreadyParked(vNo)) {
+        cout << RED << "Error: Vehicle with number \"" << vNo << "\" is already parked!" << RESET << "\n";
         return;
     }
+    v.vehicleNo = vNo;
 
-    if (isAlreadyParked(v.vehicleNo)) {
-        cout << RED << "Error: Vehicle with number \"" << v.vehicleNo << "\" is already parked!" << RESET << "\n";
-        return;
-    }
-
-    cout << "Enter Owner Name: ";
-    getline(cin, v.ownerName);
+    v.ownerName = readLine("Enter Owner Name: ");
 
     cout << "\nSelect Vehicle Type:\n";
     cout << "1. Bike / Scooter (Rs 20/hr)\n";
     cout << "2. Car / SUV (Rs 50/hr)\n";
     cout << "3. Bus / Truck (Rs 100/hr)\n";
-    cout << "Enter choice (1-3): ";
-    cin >> v.type;
+    v.type = readInt("Enter choice (1-3): ", 1, 3);
 
-    if (v.type < 1 || v.type > 3) {
-        v.type = 2; // default to car
-    }
-
-    v.entryTime = time(0); // current timestamp
+    v.entryTime = time(nullptr); // current timestamp
 
     parkedList.push_back(v);
     saveData();
@@ -173,11 +248,12 @@ void parkVehicle() {
     cout << "\n----------------------------------------\n";
     cout << "        PARKING ENTRY SLIP              \n";
     cout << "----------------------------------------\n";
-    cout << "Slot Number  : " << v.slotNo << endl;
-    cout << "Vehicle No   : " << v.vehicleNo << endl;
-    cout << "Owner Name   : " << v.ownerName << endl;
-    cout << "Vehicle Type : " << getVehicleTypeName(v.type) << endl;
-    cout << "Rate / Hour  : Rs " << getRatePerHour(v.type) << endl;
+    cout << "Slot Number  : " << v.slotNo << "\n";
+    cout << "Vehicle No   : " << v.vehicleNo << "\n";
+    cout << "Owner Name   : " << v.ownerName << "\n";
+    cout << "Vehicle Type : " << getVehicleTypeName(v.type) << "\n";
+    cout << "Rate / Hour  : Rs " << fixed << setprecision(2) << getRatePerHour(v.type) << "\n";
+    cout << "Entry Time   : " << formatTime(v.entryTime) << "\n";
     cout << "Status       : " << GREEN << "Parked Successfully!" << RESET << "\n";
     cout << "----------------------------------------\n";
 }
@@ -192,31 +268,23 @@ void unparkVehicle() {
     cout << "\nChoose Unpark Method:\n";
     cout << "1. By Slot Number\n";
     cout << "2. By Vehicle Number\n";
-    cout << "Enter choice: ";
-    int ch;
-    cin >> ch;
+    int ch = readInt("Enter choice (1-2): ", 1, 2);
 
     int index = -1;
-    int total = (int)parkedList.size();
 
     if (ch == 1) {
-        int sNo;
-        cout << "Enter Slot Number (1-" << MAX_SLOTS << "): ";
-        cin >> sNo;
-        for (int i = 0; i < total; i++) {
+        int sNo = readInt("Enter Slot Number (1-" + to_string(MAX_SLOTS) + "): ", 1, MAX_SLOTS);
+        for (size_t i = 0; i < parkedList.size(); i++) {
             if (parkedList[i].slotNo == sNo) {
-                index = i;
+                index = (int)i;
                 break;
             }
         }
     } else {
-        cin.ignore();
-        string vNo;
-        cout << "Enter Vehicle Number: ";
-        getline(cin, vNo);
-        for (int i = 0; i < total; i++) {
-            if (parkedList[i].vehicleNo == vNo) {
-                index = i;
+        string vNo = toUpper(readLine("Enter Vehicle Number: "));
+        for (size_t i = 0; i < parkedList.size(); i++) {
+            if (toUpper(parkedList[i].vehicleNo) == vNo) {
+                index = (int)i;
                 break;
             }
         }
@@ -228,12 +296,12 @@ void unparkVehicle() {
     }
 
     Vehicle v = parkedList[index];
-    time_t exitTime = time(0);
+    time_t exitTime = time(nullptr);
     double seconds = difftime(exitTime, v.entryTime);
     if (seconds < 0) seconds = 0;
 
     int minutes = (int)(seconds / 60);
-    int hours = (int)ceil((double)seconds / 3600.0);
+    int hours = (int)ceil(seconds / 3600.0);
     if (hours < 1) hours = 1; // Minimum 1 hour charge
 
     double rate = getRatePerHour(v.type);
@@ -250,79 +318,79 @@ void unparkVehicle() {
     cout << "\n========================================\n";
     cout << "          CHECK-OUT BILL / RECEIPT      \n";
     cout << "========================================\n";
-    cout << "Slot Number  : " << v.slotNo << endl;
-    cout << "Vehicle No   : " << v.vehicleNo << endl;
-    cout << "Owner Name   : " << v.ownerName << endl;
-    cout << "Vehicle Type : " << getVehicleTypeName(v.type) << endl;
-    cout << "Time Parked  : " << minutes << " mins (" << hours << " hr(s) billed)\n";
-    cout << "Rate Applied : Rs " << rate << " per hour\n";
+    cout << "Slot Number  : " << v.slotNo << "\n";
+    cout << "Vehicle No   : " << v.vehicleNo << "\n";
+    cout << "Owner Name   : " << v.ownerName << "\n";
+    cout << "Vehicle Type : " << getVehicleTypeName(v.type) << "\n";
+    cout << "Entry Time   : " << formatTime(v.entryTime) << "\n";
+    cout << "Exit Time    : " << formatTime(exitTime) << "\n";
+    cout << "Time Parked  : " << minutes << " mins (" << hours << (hours == 1 ? " hr" : " hrs") << " billed)\n";
+    cout << "Rate Applied : Rs " << fixed << setprecision(2) << rate << " per hour\n";
     cout << "----------------------------------------\n";
-    cout << "TOTAL AMOUNT : Rs " << totalBill << endl;
+    cout << "TOTAL AMOUNT : Rs " << fixed << setprecision(2) << totalBill << "\n";
     cout << "Payment      : PAID (Cash / UPI)\n";
     cout << "========================================\n";
     cout << GREEN << "Vehicle unparked successfully! Slot #" << v.slotNo << " is now free." << RESET << "\n";
 }
 
-// Option 3: Display all parked vehicles
+// Option 3: Display all parked vehicles sorted by Slot Number
 void showParkedVehicles() {
     if (parkedList.empty()) {
         cout << YELLOW << "\nNo vehicles currently parked in the lot." << RESET << "\n";
         return;
     }
 
-    cout << "\n--- CURRENTLY PARKED VEHICLES (" << parkedList.size() << "/" << MAX_SLOTS << ") ---\n";
+    // Sort temporary copy by slot number
+    vector<Vehicle> sortedList = parkedList;
+    sort(sortedList.begin(), sortedList.end(), [](const Vehicle& a, const Vehicle& b) {
+        return a.slotNo < b.slotNo;
+    });
+
+    cout << "\n--- CURRENTLY PARKED VEHICLES (" << sortedList.size() << "/" << MAX_SLOTS << ") ---\n";
     cout << left << setw(8) << "Slot" 
          << setw(18) << "Vehicle No" 
          << setw(20) << "Owner Name" 
-         << setw(20) << "Type" 
+         << setw(22) << "Type" 
          << "Entry Time\n";
-    cout << "--------------------------------------------------------------------------------\n";
-    for (int i = 0; i < (int)parkedList.size(); i++) {
-        char timeStr[50];
-        struct tm* tm_info = localtime(&parkedList[i].entryTime);
-        strftime(timeStr, 50, "%I:%M %p", tm_info);
-
-        cout << left << setw(8) << parkedList[i].slotNo
-             << setw(18) << parkedList[i].vehicleNo
-             << setw(20) << parkedList[i].ownerName
-             << setw(20) << getVehicleTypeName(parkedList[i].type)
-             << timeStr << "\n";
+    cout << "----------------------------------------------------------------------------------------\n";
+    for (size_t i = 0; i < sortedList.size(); i++) {
+        cout << left << setw(8) << sortedList[i].slotNo
+             << setw(18) << sortedList[i].vehicleNo
+             << setw(20) << sortedList[i].ownerName
+             << setw(22) << getVehicleTypeName(sortedList[i].type)
+             << formatTime(sortedList[i].entryTime) << "\n";
     }
-    cout << "--------------------------------------------------------------------------------\n";
+    cout << "----------------------------------------------------------------------------------------\n";
 }
 
-// Option 4: Search for a vehicle
+// Option 4: Search for a vehicle (case-insensitive)
 void searchVehicle() {
     if (parkedList.empty()) {
         cout << RED << "\nParking lot is empty!" << RESET << "\n";
         return;
     }
 
-    cin.ignore();
-    string searchKey;
-    cout << "\nEnter Vehicle Number or Owner Name: ";
-    getline(cin, searchKey);
+    string searchKey = toLower(readLine("\nEnter Vehicle Number or Owner Name: "));
 
     bool found = false;
-    for (int i = 0; i < (int)parkedList.size(); i++) {
-        if (parkedList[i].vehicleNo.find(searchKey) != string::npos ||
-            parkedList[i].ownerName.find(searchKey) != string::npos) {
+    for (size_t i = 0; i < parkedList.size(); i++) {
+        string vNoLower = toLower(parkedList[i].vehicleNo);
+        string oNameLower = toLower(parkedList[i].ownerName);
+
+        if (vNoLower.find(searchKey) != string::npos ||
+            oNameLower.find(searchKey) != string::npos) {
             
             if (!found) {
                 cout << GREEN << "\nMatching Vehicle(s) Found:" << RESET << "\n";
                 cout << "----------------------------------------\n";
             }
             found = true;
-            
-            char timeStr[50];
-            struct tm* tm_info = localtime(&parkedList[i].entryTime);
-            strftime(timeStr, 50, "%I:%M %p", tm_info);
 
-            cout << "Slot Number  : " << parkedList[i].slotNo << endl;
-            cout << "Vehicle No   : " << parkedList[i].vehicleNo << endl;
-            cout << "Owner Name   : " << parkedList[i].ownerName << endl;
-            cout << "Vehicle Type : " << getVehicleTypeName(parkedList[i].type) << endl;
-            cout << "Entry Time   : " << timeStr << endl;
+            cout << "Slot Number  : " << parkedList[i].slotNo << "\n";
+            cout << "Vehicle No   : " << parkedList[i].vehicleNo << "\n";
+            cout << "Owner Name   : " << parkedList[i].ownerName << "\n";
+            cout << "Vehicle Type : " << getVehicleTypeName(parkedList[i].type) << "\n";
+            cout << "Entry Time   : " << formatTime(parkedList[i].entryTime) << "\n";
             cout << "----------------------------------------\n";
         }
     }
@@ -335,7 +403,7 @@ void searchVehicle() {
 // Option 5: Show parking summary report
 void showStats() {
     int bikeCount = 0, carCount = 0, heavyCount = 0;
-    for (int i = 0; i < (int)parkedList.size(); i++) {
+    for (size_t i = 0; i < parkedList.size(); i++) {
         if (parkedList[i].type == 1) bikeCount++;
         else if (parkedList[i].type == 2) carCount++;
         else if (parkedList[i].type == 3) heavyCount++;
@@ -347,16 +415,16 @@ void showStats() {
     cout << "\n========================================\n";
     cout << "        PARKING SYSTEM REPORT           \n";
     cout << "========================================\n";
-    cout << "Total Slots Capacity : " << MAX_SLOTS << endl;
-    cout << "Currently Occupied   : " << occupied << endl;
-    cout << "Currently Free       : " << freeSlots << endl;
+    cout << "Total Slots Capacity : " << MAX_SLOTS << "\n";
+    cout << "Currently Occupied   : " << occupied << "\n";
+    cout << "Currently Free       : " << freeSlots << "\n";
     cout << "----------------------------------------\n";
-    cout << "Active Bikes         : " << bikeCount << endl;
-    cout << "Active Cars          : " << carCount << endl;
-    cout << "Active Heavy Vehicles: " << heavyCount << endl;
+    cout << "Active Bikes         : " << bikeCount << "\n";
+    cout << "Active Cars          : " << carCount << "\n";
+    cout << "Active Heavy Vehicles: " << heavyCount << "\n";
     cout << "----------------------------------------\n";
     cout << "Total Serviced       : " << totalVehiclesServiced << " vehicle(s)\n";
-    cout << "Total Revenue        : Rs " << totalRevenue << endl;
+    cout << "Total Revenue        : Rs " << fixed << setprecision(2) << totalRevenue << "\n";
     cout << "========================================\n";
 }
 
@@ -364,10 +432,8 @@ void showStats() {
 void clearAllRecords() {
     cout << RED << "\nWARNING: Are you sure you want to clear ALL records?" << RESET << "\n";
     cout << "This will delete all currently parked vehicles, total revenue, and service count.\n";
-    cout << "Type 'YES' to confirm: ";
-    string confirm;
-    cin >> confirm;
-    if (confirm == "YES") {
+    string confirm = toUpper(readLine("Type 'YES' to confirm: "));
+    if (confirm == "YES" || confirm == "Y") {
         parkedList.clear();
         totalVehiclesServiced = 0;
         totalRevenue = 0.0;
@@ -395,8 +461,7 @@ int main() {
         cout << "6. Exit\n";
         cout << "7. Clear All Records\n";
         cout << "-------------------------------------\n";
-        cout << "Enter your choice (1-7): ";
-        cin >> choice;
+        choice = readInt("Enter your choice (1-7): ", 1, 7);
 
         switch (choice) {
             case 1:
@@ -422,12 +487,12 @@ int main() {
                 break;
             default:
                 cout << RED << "\nInvalid choice! Please enter 1 to 7." << RESET << "\n";
+                break;
         }
 
         if (choice != 6) {
-            cout << "\n";
-            system("pause"); // user se wait karayega taaki output padh sake
-            system("cls");   // screen clear kar dega
+            pauseScreen();
+            clearScreen();
         }
     }
 

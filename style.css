@@ -10,6 +10,9 @@ body {
     background-color: #f4f6f9;
     color: #333;
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
@@ -38,7 +41,7 @@ header {
     text-align: left;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
     .header-container {
         justify-content: center;
     }
@@ -59,33 +62,35 @@ header p {
 
 .live-clock {
     background: #34495e;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 8px;
-    font-size: 22px;
+    font-size: 15px;
     font-weight: bold;
     color: #f1c40f;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     font-family: 'Courier New', Courier, monospace;
+    white-space: nowrap;
 }
 
 /* Main Content */
 .main-content {
     margin-top: 25px;
     margin-bottom: 40px;
+    flex: 1;
 }
 
 /* Status Cards */
 .stats-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     gap: 15px;
     margin-bottom: 25px;
 }
 
 .stat-box {
     background: #fff;
-    padding: 18px;
+    padding: 16px;
     border-radius: 8px;
     border-left: 5px solid #3498db;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -100,18 +105,24 @@ header p {
     border-left-color: #27ae60;
 }
 
+.stat-box.serviced {
+    border-left-color: #9b59b6;
+}
+
 .stat-box.revenue {
     border-left-color: #f39c12;
 }
 
 .stat-box h3 {
-    font-size: 14px;
+    font-size: 13px;
     color: #7f8c8d;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .stat-box p {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: bold;
     color: #2c3e50;
 }
@@ -124,7 +135,7 @@ header p {
     margin-bottom: 25px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .grid-layout {
         grid-template-columns: 1fr;
     }
@@ -145,6 +156,13 @@ header p {
     font-size: 18px;
     border-bottom: 2px solid #ecf0f1;
     padding-bottom: 8px;
+}
+
+.section-hint {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-top: -10px;
+    margin-bottom: 12px;
 }
 
 /* Forms */
@@ -172,6 +190,7 @@ header p {
 .form-group select:focus {
     border-color: #3498db;
     outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
 /* Buttons */
@@ -183,6 +202,7 @@ header p {
     font-weight: bold;
     cursor: pointer;
     transition: 0.2s;
+    text-align: center;
 }
 
 .btn-primary {
@@ -204,6 +224,23 @@ header p {
 
 .btn-danger:hover {
     background-color: #c0392b;
+}
+
+.btn-danger-outline {
+    background: transparent;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-danger-outline:hover {
+    background: #e74c3c;
+    color: white;
 }
 
 .btn-secondary {
@@ -236,6 +273,12 @@ header p {
     font-size: 14px;
 }
 
+.search-box input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
 /* Parking Slots Grid */
 .slots-container {
     display: grid;
@@ -251,7 +294,7 @@ header p {
     padding: 12px 8px;
     text-align: center;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s ease;
 }
 
 .slot-item.occupied {
@@ -263,11 +306,12 @@ header p {
 .slot-item.free {
     border-color: #2ecc71;
     background-color: #eafaf1;
+    cursor: default;
 }
 
 .slot-item:hover {
     transform: translateY(-2px);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
 }
 
 .slot-item .slot-title {
@@ -281,11 +325,29 @@ header p {
     font-size: 11px;
     font-weight: bold;
     color: #2c3e50;
+    word-break: break-all;
 }
 
 /* Table */
 .table-card {
     margin-top: 20px;
+}
+
+.table-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.table-card-header h2 {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
 .table-wrapper {
@@ -324,19 +386,19 @@ header p {
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.55);
 }
 
 .modal-content {
     background: #fff;
-    margin: 10% auto;
+    margin: 8% auto;
     padding: 25px;
     border-radius: 8px;
     width: 90%;
-    max-width: 420px;
+    max-width: 440px;
     text-align: left;
     position: relative;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
 }
 
 .close-btn {
@@ -346,16 +408,27 @@ header p {
     font-size: 24px;
     cursor: pointer;
     color: #888;
+    line-height: 1;
 }
 
 .close-btn:hover {
     color: #000;
 }
 
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.modal-actions .btn {
+    flex: 1;
+}
+
 .receipt-box {
     border: 1px dashed #333;
     padding: 15px;
-    margin: 15px 0;
+    margin: 15px 0 5px 0;
     background: #fdfdfd;
 }
 
@@ -364,6 +437,8 @@ header p {
     margin-bottom: 10px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
+    font-size: 16px;
+    letter-spacing: 1px;
 }
 
 .receipt-row {
@@ -379,6 +454,37 @@ header p {
     margin-top: 8px;
     font-weight: bold;
     font-size: 15px;
+    color: #27ae60;
+}
+
+/* Print Stylesheet */
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    #billModal, #billModal * {
+        visibility: visible !important;
+    }
+    #billModal {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        background: transparent !important;
+        display: block !important;
+    }
+    .modal-content {
+        margin: 20px auto !important;
+        box-shadow: none !important;
+        border: 2px solid #000 !important;
+        width: 95% !important;
+        max-width: 450px !important;
+        padding: 20px !important;
+    }
+    .close-btn, .modal-actions {
+        display: none !important;
+    }
 }
 
 /* Footer */

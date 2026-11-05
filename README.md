@@ -1,67 +1,74 @@
-# Vehicle Parking Management System
+# 🚗 Vehicle Parking Management System
 
-A simple and clean **Vehicle Parking Management System** mini-project created with **C++** and **HTML/CSS/JavaScript**.
+A robust and clean **Vehicle Parking Management System** mini-project developed in **C++** (Console Application) and **HTML5 / CSS3 / Modern JavaScript** (Web Application).
 
-This project helps manage a parking lot with 20 slots. It allows parking vehicles, calculating bills during check-out based on hourly rates, viewing active parked vehicles, and checking total earnings.
+This project manages a parking lot of 20 slots with automatic slot allocation, hourly tariff billing, real-time slot visualization, receipt printing, and persistent data storage.
 
 ---
 
 ## 📌 Features
 
-- **Park Vehicle**: Enter vehicle registration number, owner name, and vehicle type (Bike, Car, or Bus/Truck). Automatically assigns an empty slot.
-- **Unpark & Billing**: Calculates parking duration and calculates the bill according to vehicle type.
-- **20 Slots Management**: Real-time status of all 20 parking slots (Occupied vs Free).
-- **Search Vehicle**: Search parked vehicles by registration number or owner name.
-- **Report & Earnings**: View total vehicles parked and total money collected.
-- **Data Persistence**: 
-  - In **C++**: Saves data in `parking_data.txt`.
-  - In **Web**: Saves data in browser `localStorage`.
+- **Park Vehicle**: Enter vehicle registration number, owner name, and category (Bike, Car, or Bus/Truck). Automatically detects and assigns the first available parking slot with duplicate prevention.
+- **Unpark & Billing**: Computes parking duration from entry timestamp and calculates billing amounts based on hourly vehicle rates (minimum 1-hour charge).
+- **Interactive 20-Slot Grid**: Real-time visual status of all 20 parking slots (Available vs Occupied) with direct click-to-unpark confirmation.
+- **Live Search**: Instant case-insensitive search by registration number or owner name with matching slot highlights.
+- **Reports & Statistics**: Tracks total vehicles serviced, currently occupied slots, available slots, and total revenue collected.
+- **Receipt Modal & Printable Voucher**: Pop-up receipt with entry/exit timestamps, duration, rate, and total bill, formatted with dedicated CSS print styles (`@media print`).
+- **Live Digital Clock**: Real-time day, date, and digital clock display in the header.
+- **Clear All Records**: Reset and initialize a fresh parking state with confirmation dialogs in both C++ and Web versions.
+- **Data Persistence**:
+  - **C++**: Saves and restores state automatically from `parking_data.txt`.
+  - **Web**: Saves state in browser `localStorage`.
+- **Fault-Tolerant Input Handling**: C++ CLI uses safe stream input routines to prevent infinite loops, buffer desync, and invalid type crashes.
 
 ---
 
 ## 💰 Parking Rates (Tariff)
 
-| Vehicle Type | Rate / Hour |
-| :--- | :--- |
-| **Bike / Scooter** (2-Wheeler) | Rs 20 / hour |
-| **Car / SUV** (4-Wheeler) | Rs 50 / hour |
-| **Bus / Truck** (Heavy Vehicle) | Rs 100 / hour |
+| Vehicle Type | Rate / Hour | Minimum Charge |
+| :--- | :--- | :--- |
+| **Bike / Scooter** (2-Wheeler) | Rs 20 / hour | Rs 20.00 (1 hr) |
+| **Car / SUV** (4-Wheeler) | Rs 50 / hour | Rs 50.00 (1 hr) |
+| **Bus / Truck** (Heavy Vehicle) | Rs 100 / hour | Rs 100.00 (1 hr) |
 
 ---
 
 ## 🚀 How to Run
 
 ### 1. Web Version (HTML / CSS / JS)
-Simply double click and open **`index.html`** in any web browser (Chrome, Edge, Firefox, etc.). No setup required!
+Simply double-click or open **`index.html`** in any modern web browser (Chrome, Edge, Firefox, Safari). No installation or server required!
 
 ### 2. C++ Console Program
-Compile and run `main.cpp` using any C++ compiler:
+Compile and execute `main.cpp` using any standard C++ compiler (GCC / Clang / MSVC):
 
 ```bash
-# Compile
-g++ main.cpp -o main.exe
+# Compile with GCC / G++
+g++ -Wall -Wextra main.cpp -o main.exe
 
-# Run (Windows)
+# Run on Windows
 .\main.exe
 
-# Run (Linux / Mac)
+# Run on Linux / macOS
+g++ -std=c++11 main.cpp -o main
 ./main
 ```
 
 ---
 
-## 📁 Files in Project
+## 📁 Project Structure
 
-- `main.cpp` - Complete C++ source code with menu, structs, and file handling.
-- `index.html` - Web interface layout and structure.
-- `style.css` - Simple and clean styling.
-- `app.js` - JavaScript logic for parking, billing, and storage.
-- `README.md` - Project documentation.
+```text
+├── index.html       # Web application structure, status cards & modal
+├── style.css        # Responsive styling, slot cards, and print styles
+├── app.js           # Client-side logic, localStorage handling, search & clock
+├── main.cpp         # Complete C++ source code with file handling & safe I/O
+└── README.md        # Project overview and documentation
+```
 
 ---
 
-## 🎓 Technology Used
+## 🎓 Technologies Used
 
-- **C++** (Standard Library, File I/O, Vectors, Structs)
-- **HTML5 & CSS3**
-- **JavaScript** (DOM Manipulation, LocalStorage)
+- **C++**: Vectors, Structs, File I/O (`fstream`), `<ctime>`, `<iomanip>`, `<algorithm>`
+- **HTML5 & CSS3**: Responsive CSS Grid / Flexbox, Print Media Queries, Modal Dialogs
+- **JavaScript (ES6+)**: DOM Manipulation, Event Handling, LocalStorage API, Date API

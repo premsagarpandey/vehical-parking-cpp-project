@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Parking Management System</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚗</text></svg>">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -28,16 +29,20 @@
                 <p id="totalSlots">20</p>
             </div>
             <div class="stat-box occupied">
-                <h3>Occupied Slots</h3>
+                <h3>Occupied</h3>
                 <p id="occupiedSlots">0</p>
             </div>
             <div class="stat-box free">
-                <h3>Free Slots</h3>
+                <h3>Available</h3>
                 <p id="freeSlots">20</p>
+            </div>
+            <div class="stat-box serviced">
+                <h3>Total Serviced</h3>
+                <p id="totalServiced">0</p>
             </div>
             <div class="stat-box revenue">
                 <h3>Total Earnings</h3>
-                <p id="totalEarnings">Rs 0</p>
+                <p id="totalEarnings">Rs 0.00</p>
             </div>
         </div>
 
@@ -52,12 +57,12 @@
                     <form id="parkingForm">
                         <div class="form-group">
                             <label for="vehicleNo">Vehicle Number:</label>
-                            <input type="text" id="vehicleNo" placeholder="e.g. DL 01 AB 1234" required>
+                            <input type="text" id="vehicleNo" placeholder="e.g. DL 01 AB 1234" required autocomplete="off">
                         </div>
 
                         <div class="form-group">
                             <label for="ownerName">Owner Name:</label>
-                            <input type="text" id="ownerName" placeholder="e.g. Rahul Sharma" required>
+                            <input type="text" id="ownerName" placeholder="e.g. Rahul Sharma" required autocomplete="off">
                         </div>
 
                         <div class="form-group">
@@ -75,20 +80,22 @@
 
                 <!-- Tariff Rates Box -->
                 <div class="card">
-                    <h3>Parking Rates</h3>
+                    <h3>Parking Rates (Tariff)</h3>
                     <table class="rate-table">
-                        <tr>
-                            <td>🏍️ Bike / Scooter</td>
-                            <td><strong>Rs 20 / hr</strong></td>
-                        </tr>
-                        <tr>
-                            <td>🚗 Car / SUV</td>
-                            <td><strong>Rs 50 / hr</strong></td>
-                        </tr>
-                        <tr>
-                            <td>🚛 Bus / Truck</td>
-                            <td><strong>Rs 100 / hr</strong></td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td>🏍️ Bike / Scooter</td>
+                                <td><strong>Rs 20 / hr</strong></td>
+                            </tr>
+                            <tr>
+                                <td>🚗 Car / SUV</td>
+                                <td><strong>Rs 50 / hr</strong></td>
+                            </tr>
+                            <tr>
+                                <td>🚛 Bus / Truck</td>
+                                <td><strong>Rs 100 / hr</strong></td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
 
@@ -99,12 +106,13 @@
                 
                 <!-- Search Box -->
                 <div class="card search-box">
-                    <input type="text" id="searchInput" placeholder="🔍 Search vehicle by number or owner name...">
+                    <input type="text" id="searchInput" placeholder="🔍 Search vehicle by registration number or owner name..." autocomplete="off">
                 </div>
 
                 <!-- Visual 20 Slots Grid -->
                 <div class="card">
                     <h2>Parking Slots (1 - 20)</h2>
+                    <p class="section-hint">Click any occupied slot to unpark & generate bill.</p>
                     <div class="slots-container" id="slotsGrid">
                         <!-- Filled by JavaScript -->
                     </div>
@@ -116,7 +124,10 @@
 
         <!-- Parked Vehicles Table -->
         <div class="card table-card">
-            <h2>Currently Parked Vehicles</h2>
+            <div class="table-card-header">
+                <h2>Currently Parked Vehicles</h2>
+                <button type="button" class="btn btn-danger-outline" onclick="clearAllRecords()">🗑️ Clear All Records</button>
+            </div>
             <div class="table-wrapper">
                 <table id="vehiclesTable">
                     <thead>
@@ -139,14 +150,16 @@
     </div>
 
     <!-- Bill / Receipt Modal -->
-    <div id="billModal" class="modal">
+    <div id="billModal" class="modal" role="dialog" aria-modal="true">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <div id="billDetails">
                 <!-- Filled on unpark -->
             </div>
-            <button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
-            <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
         </div>
     </div>
 
